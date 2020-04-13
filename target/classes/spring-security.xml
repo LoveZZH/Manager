@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd">
+    <!--
+        <security:http>:spring过滤器链配置
+            1) 需要拦截什么资源
+            2) 什么资源对应什么角色权限
+            3) 定制认证方式: HttpBasic or FormLogin
+            4) 定义登录页面,定义登录请求地址,定义错误处理方式
+    -->
+    <!--配置拦截规则-->
+    <security:http pattern="/login.jsp" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http auto-config="false" use-expressions="true">
+       <security:intercept-url pattern="/**" access="hasRole('ROLE_SHI')" />
+
+        <security:form-login
+                login-page="/login.jsp"
+                login-processing-url="/login"
+                default-target-url="/index.jsp"
+                authentication-failure-url="/login.jsp"/>
+
+        <!--关闭跨站伪造-->
+        <security:csrf disabled="true"/>
+    </security:http>
+
+
+
+    <!--加密方式-->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <security:authentication-manager>
+            <!--定义授权信息提供源-->
+        <security:authentication-provider user-service-ref="loginServices" >
+            <!--加密方式-->
+            <security:password-encoder ref="passwordEncoder"/>
+        </security:authentication-provider>
+
+    </security:authentication-manager>
+    <security:global-method-security jsr250-annotations="enabled"/>
+</beans>

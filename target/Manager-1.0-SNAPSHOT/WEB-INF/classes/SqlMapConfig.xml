@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--配置log4j日志组件-->
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    <!--配置Mybatis的分页插件PageHelper-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--
+                指定PageHelper连接数据库的类型，因为不同数据库有不同的sql语法，
+                不指定的话PageHelper也会自动探测数据库类型
+                可配置：oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix,h2,sqlserver2012,derby
+            -->
+            <property name="helperDialect" value="mysql"></property>
+        </plugin>
+    </plugins>
+
+</configuration>    
